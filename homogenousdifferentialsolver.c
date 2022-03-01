@@ -46,11 +46,6 @@ void homogenousDifferentialSolver(double a, double b, double c){
         displayOneRoot(r, initialY, true);
         
     } else {
-        //printf("y(0): ");
-        //scanf("%lf", &initialY);
-        //printf("y'(0): ");
-        //scanf("%lf", &initialYPrime);
-
         double k = (-1 * b) / (2 * a);
         double alpha = sqrt((b * b - 4 * a * c) / -1) / (2 * a);
 
