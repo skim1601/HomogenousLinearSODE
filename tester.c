@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "secorderode.c"
+#include "homogenousdifferentialsolver.c"
 
 void tester(void){
     double a, b, c;
