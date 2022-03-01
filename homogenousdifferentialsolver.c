@@ -15,11 +15,10 @@ void homogenousDifferentialSolver(double a, double b, double c){
     if (b * b - 4 * a * c > 0){
         double r1 = (-1 * b + sqrt(b * b - 4 * a * c)) / (2 * a);
         double r2 = (-1 * b - sqrt(b * b - 4 * a * c)) / (2 * a);
-
-        displayTwoRoots(r1, r2, 0, 0, false);
-
         double initialY, initialYPrime;
         double constants [2];
+
+        displayTwoRoots(r1, r2, 0, 0, false);
 
         printf("Trying initial values\n");
         printf("y(0): ");
@@ -34,33 +33,30 @@ void homogenousDifferentialSolver(double a, double b, double c){
 
     } else if (b * b - 4 * a * c == 0){
         double r = (-1 * b) / (2 * a);
+        double initialY;
 
         displayOneRoot(r, 0, false);
         
-        double initialY;
         printf("Trying initial value\n");
         printf("y(0) = ");
         scanf("%lf", &initialY);
 
         printf("\nCalculated initial value\n");
         displayOneRoot(r, initialY, true);
-        
+
     } else {
         double k = (-1 * b) / (2 * a);
         double alpha = sqrt((b * b - 4 * a * c) / -1) / (2 * a);
-
-        displayNoRoot(k, alpha, 0, 0, false);
-
         double initialY, initialYPrime;
         double constants [2];
+
+        displayNoRoot(k, alpha, 0, 0, false);
 
         printf("Trying initial values\n");
         printf("y(0): ");
         scanf("%lf", &initialY);
         printf("y'(0): ");
         scanf("%lf", &initialYPrime);
-
-        
         imaginaryInitialValuesSolver(constants, k, alpha, initialY, initialYPrime);
 
         printf("\nCalculated initial values\n");
