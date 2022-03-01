@@ -6,7 +6,7 @@ void displayTwoRoots (double r1, double r2, double c, double d, bool constantFou
     printf("Possible solution: y(t) = ");
     
     if (constantFound){
-        printf("%lf", c);
+        printf("(%lf)", c);
     } else {
         printf("C");
     }
