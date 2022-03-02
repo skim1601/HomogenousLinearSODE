@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "homogenousdifferentialsolver.c"
+#include "sdesolver.c"
 
 void tester(void){
     double a, b, c;
@@ -14,9 +14,10 @@ void tester(void){
     printf("Enter your c value: ");
     scanf("%lf", &c);
 
-    homogenousDifferentialSolver(a, b, c);
+    secondaryDifferentialSolver(a, b, c);
 }
 
 int main(void){
     tester();
+    return 0;
 }
