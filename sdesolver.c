@@ -43,12 +43,12 @@ void twoRootsInitial (double* constants, double r1, double r2, double y, double 
 }
 
 void twoRoots(double a, double b, double c){
-    double r1 = (-1 * b + sqrt(b * b - 4 * a * c)) / (2 * a);
-    double r2 = (-1 * b - sqrt(b * b - 4 * a * c)) / (2 * a);
+    double root1 = (-1 * b + sqrt(b * b - 4 * a * c)) / (2 * a);
+    double root2 = (-1 * b - sqrt(b * b - 4 * a * c)) / (2 * a);
     double initialY, initialYPrime;
     double constants [2];
 
-    displayTwoRoots(r1, r2, 0, 0, false);
+    displayTwoRoots(root1, root2, 0, 0, false);
 
     printf("Trying initial values\n");
     printf("y(0): ");
@@ -56,10 +56,10 @@ void twoRoots(double a, double b, double c){
     printf("y'(0): ");
     scanf("%lf", &initialYPrime);
 
-    twoRootsInitial(constants, r1, r2, initialY, initialYPrime);
+    twoRootsInitial(constants, root1, root2, initialY, initialYPrime);
 
     printf("\nCalculated initial values\n");
-    displayTwoRoots(r1, r2, constants[0], constants[1], true);
+    displayTwoRoots(root1, root2, constants[0], constants[1], true);
     return;
 }
 
@@ -82,17 +82,17 @@ void displayOneRoot (double r, double c, bool constantFound){
 }
 
 void oneRoot(double a, double b){
-    double r = (-1 * b) / (2 * a);
+    double root = (-1 * b) / (2 * a);
     double initialY;
 
-    displayOneRoot(r, 0, false);
+    displayOneRoot(root, 0, false);
         
     printf("Trying initial value\n");
     printf("y(0) = ");
     scanf("%lf", &initialY);
 
     printf("\nCalculated initial value\n");
-    displayOneRoot(r, initialY, true);
+    displayOneRoot(root, initialY, true);
 }
 
 // Display the solution of homoegenous and linear second order DE with no real characteristic equation solution
