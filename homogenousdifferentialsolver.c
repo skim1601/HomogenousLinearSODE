@@ -7,7 +7,7 @@
 #include "twoinitialvaluessolver.c"
 #include "imaginaryinitialvaluessolver.c"
 
-// A tool to solve homogenous second order differential equation
+// A function that solves homogenous second order differential equation
 // ay'' + by' + cy = 0
 void homogenousDifferentialSolver(double a, double b, double c){
     printf("Your equation: (%lf)y'' + (%lf)y' + (%lf)y = 0\n", a, b, c);
