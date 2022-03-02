@@ -27,6 +27,6 @@ void displayNoRoot (double k, double a, double c, double d, bool constantFound){
         printf("e^(%lft) * cos(%lft)", k, a);
     }
 
-    printf("\n");
+    printf("\n\n");
     return;
 }
