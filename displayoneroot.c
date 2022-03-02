@@ -15,6 +15,6 @@ void displayOneRoot (double r, double c, bool constantFound){
         printf(" * e^(%lft)", r);
     }
 
-    printf("\n");
+    printf("\n\n");
     return;
 }
