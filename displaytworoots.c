@@ -25,6 +25,6 @@ void displayTwoRoots (double r1, double r2, double c, double d, bool constantFou
         printf("e^(%lft)", r2);
     }
 
-    printf("\n");
+    printf("\n\n");
     return;
 }
