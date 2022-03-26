@@ -2,28 +2,46 @@
 #include <math.h>
 #include <stdbool.h>
 
+typedef struct twoRoot{
+    double root1, root2;
+    double y, yPrime;
+    double constant1, constant2;
+} TwoRoot;
+
+typedef struct oneRoot{
+    double root;
+    double y;
+    double constant;
+} OneRoot;
+
+typedef struct noRoot{
+    double alpha, beta; // Complex root: alpha +- beta * i
+    double y, yPrime;
+    double constant1, constant2;
+} NoRoot;
+
 // Display the solution of homoegenous and linear second order DE with two real characteristic equation solutions
-void displayTwoRoots (double r1, double r2, double c, double d, bool constantFound){
+void displayTwoRoots (TwoRoot* eq, bool constantFound){
     printf("Possible solution: y(t) = ");
     
     if (constantFound){
-        printf("%lf", c);
+        printf("%lf", eq -> constant1);
     } else {
         printf("C");
     }
 
-    if (r1 != 0){
-        printf("e^(%lft) ", r1);
+    if (eq -> root1 != 0){
+        printf(" * e^(%lft)", eq -> root1);
     }
 
     if (constantFound){
-        printf(" + (%lf)", d);
+        printf(" + (%lf)", eq -> constant2);
     } else {
         printf(" + D");
     }
 
-    if (r2 != 0){
-        printf("e^(%lft)", r2);
+    if (eq -> root2 != 0){
+        printf(" * e^(%lft)", eq -> root2);
     }
 
     printf("\n\n");
@@ -31,129 +49,164 @@ void displayTwoRoots (double r1, double r2, double c, double d, bool constantFou
 }
 
 // Algorithm:
-// y = c + d
-// yPrime = c * r1 + d * r2
-// d = y - c
-// yPrime = c * r1 + (y - c) * r2 
-// c = (yPrime - y * r2) / (r1 - r2)
-void twoRootsInitial (double* constants, double r1, double r2, double y, double yPrime){
-    *constants = (yPrime - y * r2) / (r1 - r2);
-    *(constants + 1) = y - *constants;
+// Given initial value: (t, y, y') = (0, y, y')
+// y = constant1 + constant2
+// yPrime = constant1 * root1 + constant2 * root2
+// constant2 = y - constant1
+// yPrime = constant1 * root1 + (y - constant2) * root2 
+// constant1 = (yPrime - y * root2) / (root1 - root2)
+void twoRootsInitial (TwoRoot* eq){
+    eq -> constant1 = (eq -> yPrime - eq -> y * eq -> root2) / (eq -> root1 - eq -> root2);
+    eq -> constant2 = eq -> y - eq -> constant1;
     return;
 }
 
+// a * r^2 + b * r + c = 0
+// b^2 - 4 * a * c > 0
 void twoRoots(double a, double b, double c){
-    double root1 = (-1 * b + sqrt(b * b - 4 * a * c)) / (2 * a);
-    double root2 = (-1 * b - sqrt(b * b - 4 * a * c)) / (2 * a);
-    double initialY, initialYPrime;
-    double constants [2];
+    TwoRoot equation = {0, 0, 0, 0, 0, 0}; 
+    TwoRoot* eq = &equation;
 
-    displayTwoRoots(root1, root2, 0, 0, false);
+    eq -> root1 = (-1 * b + sqrt(b * b - 4 * a * c)) / (2 * a);
+    eq -> root2 = (-1 * b - sqrt(b * b - 4 * a * c)) / (2 * a);
+    displayTwoRoots(eq, false);
 
     printf("Trying initial values\n");
     printf("y(0): ");
-    scanf("%lf", &initialY);
+    scanf("%lf", &(eq -> y));
     printf("y'(0): ");
-    scanf("%lf", &initialYPrime);
+    scanf("%lf", &(eq -> yPrime));
 
-    twoRootsInitial(constants, root1, root2, initialY, initialYPrime);
+    twoRootsInitial(eq);
 
     printf("\nCalculated initial values\n");
-    displayTwoRoots(root1, root2, constants[0], constants[1], true);
+    displayTwoRoots(eq, true);
     return;
 }
 
 // Display the solution of homoegenous and linear second order DE with one real characteristic equation solution
-void displayOneRoot (double r, double c, bool constantFound){
+void displayOneRoot (OneRoot* eq, bool constantFound){
     printf("Possible solution: y(t) = ");
 
     if (constantFound){
-        printf("%lf", c);
+        printf("%lf", eq -> constant);
     } else {
         printf("C");
     }
 
-    if (r != 0){
-        printf(" * e^(%lft)", r);
-    }
-
-    printf("\n\n");
-    return;
-}
-
-void oneRoot(double a, double b){
-    double root = (-1 * b) / (2 * a);
-    double initialY;
-
-    displayOneRoot(root, 0, false);
-        
-    printf("Trying initial value\n");
-    printf("y(0) = ");
-    scanf("%lf", &initialY);
-
-    printf("\nCalculated initial value\n");
-    displayOneRoot(root, initialY, true);
-}
-
-// Display the solution of homoegenous and linear second order DE with no real characteristic equation solution
-// y1 = c * e ^ (k * t) * cos (a * t)
-// y2 = d * e ^ (k * t) * sin (a * t)
-void displayNoRoot (double k, double a, double c, double d, bool constantFound){
-    printf("Possible solution: y(t) = ");
-    
-    if (constantFound){
-        printf("%lf", c);
-    } else {
-        printf("C");
-    }
-
-    if (k != 0){
-        printf("e^(%lft) * cos(%lft)", k, a);
+    if (eq -> root != 0){
+        printf(" * e^(%lft)", eq -> root);
     }
 
     if (constantFound){
-        printf(" + (%lf)", d);
+        printf(" + C");
     } else {
         printf(" + D");
     }
 
-    if (k != 0){
-        printf("e^(%lft) * sin(%lft)", k, a);
+    if (eq -> root != 0){
+        printf(" * t * e^(%lft)", eq -> root);
     }
 
     printf("\n\n");
     return;
 }
 
-// Algorithm
-// y = c
-// yPrime = c * k + d * a 
-// d = (yPrime - c * k) / a
-void noRootInitial (double* constants, double k, double a, double y, double yPrime){
-    *constants = y;
-    *(constants + 1) = (yPrime - *constants * k) / a;
+
+// Algorithm:
+// Given initial value: (t, y, y') = (0, y, y')
+// y = constant1
+// constant2 cannot be found as t (= 0) is multiplied to the term involving constant2
+void oneRootInitial (OneRoot* eq){
+    eq -> constant = eq -> y;
     return;
 }
 
-void noRoot(double a, double b, double c){
-    double k = (-1 * b) / (2 * a);
-    double alpha = sqrt((b * b - 4 * a * c) / -1) / (2 * a);
-    double initialY, initialYPrime;
-    double constants [2];
+// ar^2 + br + c = 0
+// b^2 - 4ac = 0
+void oneRoot(double a, double b){
+    OneRoot equation = {0, 0, 0}; 
+    OneRoot* eq = &equation;
 
-    displayNoRoot(k, alpha, 0, 0, false);
+    eq -> root = (-1 * b) / (2 * a);
+
+    displayOneRoot(eq, false);
+        
+    printf("Trying initial value\n");
+    printf("y(0) = ");
+    scanf("%lf", &(eq -> y));
+
+    oneRootInitial(eq);
+
+    printf("\nCalculated initial value\n");
+    displayOneRoot(eq, true);
+}
+
+// Display the solution of homoegenous and linear second order DE with no real characteristic equation solution
+// y1 = constant1 * e ^ (alpha * t) * cos (beta * t)
+// y2 = constant2 * e ^ (alpha * t) * sin (beta * t)
+void displayNoRoot (NoRoot* eq, bool constantFound){
+    printf("Possible solution: y(t) = ");
+    
+    if (constantFound){
+        printf("%lf", eq -> constant1);
+    } else {
+        printf("C");
+    }
+
+    if (eq -> alpha != 0){
+        printf(" * e^(%lft)", eq -> alpha);
+    }
+
+    printf(" * cos(%lft)", eq -> beta);
+    
+
+    if (constantFound){
+        printf(" + (%lf)", eq -> constant2);
+    } else {
+        printf(" + D");
+    }
+
+    if (eq -> alpha != 0){
+        printf(" * e^(%lft)", eq -> alpha);
+    }
+
+    printf(" * sin(%lft)\n\n", eq -> beta);
+    return;
+}
+
+// Algorithm
+// Given initial value: (t, y, y') = (0, y, y')
+// y = constant1
+// Given initial value: (t, y, y') = (t, y, y')
+// yPrime = constant1 * alpha + constant2 * beta
+// constant2 = (yPrime - constant1 * alpha) / beta
+void noRootInitial (NoRoot* eq){
+    eq -> constant1 = eq -> y;
+    eq -> constant2 = (eq -> yPrime - eq -> constant1 * eq -> alpha) / eq -> beta;
+    return;
+}
+
+// a * r^2 + b * r + c = 0
+// b^2 - 4 * a * c < 0
+void noRoot(double a, double b, double c){
+    NoRoot equation = {0, 0, 0, 0, 0, 0}; 
+    NoRoot* eq = &equation;
+    eq -> alpha = (-1 * b) / (2 * a);
+    eq -> beta = sqrt((b * b - 4 * a * c) / -1) / (2 * a);
+    displayNoRoot(eq, false);
 
     printf("Trying initial values\n");
     printf("y(0): ");
-    scanf("%lf", &initialY);
+    scanf("%lf", &(eq -> y));
     printf("y'(0): ");
-    scanf("%lf", &initialYPrime);
-    noRootInitial(constants, k, alpha, initialY, initialYPrime);
+    scanf("%lf", &(eq -> yPrime));
+    noRootInitial(eq);
 
     printf("\nCalculated initial values\n");
-    displayNoRoot(k, alpha, constants[0], constants[1], true);
+    displayNoRoot(eq, true);
+    return;
 }
-
 
 // A function that solves homogenous second order differential equation
 // ay'' + by' + cy = 0
