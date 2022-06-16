@@ -1,4 +1,4 @@
-# HomogenousSecondOrderLinearDESolver
+# HomogenousSecondOrderLinearDifferentialEquationSolver
 A program that solves a Differential Equation in the following form:
 **ay'' + by' + cy = 0**
 - Implemented the use of characteristic equation
